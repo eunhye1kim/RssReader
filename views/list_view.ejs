@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Untitled Document</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript">
+        function send_data(data, dest) {
+            var tmp_form = document.createElement('form'),
+                    tmp;
+            tmp_form.action = dest;
+            tmp_form.action = 'post';
+
+            for(var i in data) {
+                tmp = document.createElement('input');
+                tmp.type = 'hidden';
+                tmp.name = i;
+                tmp.value = data[i];
+                // Now put everything together...
+                theForm.appendChild(tmp);
+            }
+
+            document.body.appendChild(tmp_form);
+            tmp_form.submit();
+            document.body.removeChild(tmp_form);
+        }
+    </script>
+</head>
+<body>
+    <h3>RSS List View</h3>
+    <dl>
+        <%=
+            var user_info = JSON.parse(user_info),
+                rss = user_info.rss;
+            for (var i = 0; i < rss.length; i++) {
+        %>
+                <dt><%= rss[i].title %></dt>
+        <%=
+                for (var j = 0; j<rss[i].item.length; j++) {
+        %>
+                    <dd>
+                        <a href="<%= rss[i].item[j].link %>" name="<%= rss[i].item[j].title %>" onclick="send_data({section: '<%= rss[i].title %>', item: '<%= rss[i].item[j].title %>'}, '/check_read');" target="_blank">
+                            <%= rss[i].item[j].title %>
+                        </a>
+                    </dd>
+        <%=
+                }
+            }
+         %>
+    </dl>
+</body>
+</html>

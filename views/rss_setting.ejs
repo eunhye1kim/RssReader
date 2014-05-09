@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Untitled Document</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+    <h3>BugTrack RSS Setting</h3>
+    <form method="post" action="/mod_rss">
+        <%=
+            var user_info = JSON.parse(argv.user_info),
+                rss = user_info.rss;
+        %>
+        <table style="width: 300px;">
+            <tr>
+                <th></th>
+                <th>title</th>
+                <th>url</th>
+            </tr>
+            <%= for(var i = 0; i < rss.length; i++) {%>
+                <tr>
+                    <td><input type="checkbox" name="del[<%= rss[i].title %>]" /></td>
+                    <td><%= rss[i].title %></td>
+                    <td><%= rss[i].url %></td>
+                </tr>
+            <%= }%>
+        </table>
+        <p>
+            Name :
+            <input type="text" name="new_name" value="" />
+        </p>
+        <p>
+            RSS :
+            <input type="text" name="new_url" value=""  />
+        </p>
+        <p>
+            <input type="submit" name="action" value="Add" />
+            <input type="submit" name="action" value="Del" />
+        </p>
+    </form>
+</body>
+</html>

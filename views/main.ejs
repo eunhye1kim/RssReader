@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Rss Reader Main</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript">
+        <%=
+            var user_info = JSON.parse(argv.user_info), // for ejs
+                rss = user_info.rss;
+        %>
+        var user_info = JSON.parse(<%=argv.user_info%>), // for javascript
+                rss = user_info.rss,
+                refresh_period = user_info.refresh_period;
+
+        function send_data(data, dest) {
+            var tmp_form = document.createElement('form'),
+                    tmp;
+            tmp_form.action = dest;
+            tmp_form.action = 'post';
+
+            for(var i in data) {
+                tmp = document.createElement('input');
+                tmp.type = 'hidden';
+                tmp.name = i;
+                tmp.value = data[i];
+                // Now put everything together...
+                theForm.appendChild(tmp);
+            }
+
+            document.body.appendChild(tmp_form);
+            tmp_form.submit();
+            document.body.removeChild(tmp_form);
+        }
+    </script>
+</head>
+<body onload="setInterval('window.location.reload()', refresh_period);">
+    <div style="position:absolute; top:0; left:0; height:20px;">
+        <a href="/list_view" target="main_view">[Home]</a>
+        <a href="/rss_setting" target="main_view">[RSS Setting]</a>
+        <a href="/env_setting" target="main_view">[Environment Setting]</a>
+    </div>
+    <div id="alert_view" style="position:absolute; text-align:right; bottom:0; right:0; height:20px; background-color: #EEEEEE; z-index:1">
+        <%=
+            for(var i = 0; i < rss.length; i++) {
+                for(var j = 0; j < rss[i].item.length; j++) {
+                    if(rss[i].item[j].update) {
+        %>
+                <a href="<%= rss[i].item[j].link %>" target="_blank" onclick="document.getElementById('alert_view').style.visibility='hidden'; send_data({section: '<%= rss[i].title %>', item: '<%= rss[i].item[j].title %>'}, '/check_read');">
+                    <%= rss[i].item[j].title %>
+                </a>
+        <%=
+                    }
+                }
+            }
+        %>
+
+    </div>
+    <iframe src="/list_view" name="main_view" frameborder="0" style="position:absolute; top:20px; height:100%; width:100%;"/>
+</body>
+</html>

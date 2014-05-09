@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Untitled Document</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+    <h3>Environment Settings</h3>
+    <%=
+        var user_info = JSON.parse(argv.user_info),
+            refresh_period = user_info.refresh_period,
+            use_max_rss = user_info.use_max_rss,
+            max_rss = user_info.max_rss;
+     %>
+    <form action="/env_setting" method="post">
+        The period of refresh (second) : <input type="number" name="ref_period" value="<%= refresh_period %>" /> <br />
+        Please type the period of refresh. <br />
+        <h3>Setting the limit of number of RSS article per URL item.</h3>
+        <input type="checkbox" name="use_limit" value="<%= use_max_rss %>"/> Use the limit.<br />
+        The limit of number of RSS article per URL item : <input type="number" name="article_limit" value="<%= max_rss %>" /><br />
+        <input type="submit" name="action" value="Apply"/>
+        <input type="submit" name="action" value="Cancel"/>
+    </form>
+</body>
+</html>
